@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة تحكم القنوات</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <style>
+    body { font-family: 'Cairo', sans-serif; background: #f5f5f5; padding: 20px; }
+    h2 { text-align: center; color: #b00020; }
+    form { background: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    input, select, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
+    button { background: #b00020; color: white; border: none; cursor: pointer; }
+    button:hover { background: #a0001a; }
+  </style>
+</head>
+<body>
+
+<h2>لوحة تحكم - إضافة قناة</h2>
+
+<form onsubmit="addChannel(event)">
+  <label>اسم القناة</label>
+  <input type="text" id="name" required>
+  <label>رابط البث</label>
+  <input type="text" id="link" required>
+  <label>رابط صورة القناة</label>
+  <input type="text" id="image" required>
+  <label>اسم القسم (مثال: sport1)</label>
+  <input type="text" id="category" required>
+  <button type="submit">إضافة</button>
+</form>
+
+<script>
+  var firebaseConfig = {
+    databaseURL: "https://streamova-admin-default-rtdb.europe-west1.firebasedatabase.app/"
+  };
+  firebase.initializeApp(firebaseConfig);
+  var database = firebase.database();
+
+  function addChannel(e) {
+    e.preventDefault();
+    var name = document.getElementById("name").value;
+    var link = document.getElementById("link").value;
+    var image = document.getElementById("image").value;
+    var category = document.getElementById("category").value;
+
+    firebase.database().ref(category).push({
+      name: name,
+      link: link,
+      image: image
+    }).then(() => {
+      alert("تمت إضافة القناة بنجاح!");
+      document.getElementById("name").value = "";
+      document.getElementById("link").value = "";
+      document.getElementById("image").value = "";
+      document.getElementById("category").value = "";
+    });
+  }
+</script>
+
+</body>
+</html>
